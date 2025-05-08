@@ -79,3 +79,13 @@ def delete_task(task_id: int, username: str = Depends(get_current_user)):
             tasks.pop(i)
             return {"message": "Task deleted"}
     raise HTTPException(status_code=404, detail="Task not found")
+
+from fastapi import HTTPException
+
+@app.put("/tasks/{task_id}")
+def update_task(task_id: int, updated_task: Todo):
+    for task in tasks:
+        if task["id"] == task_id:
+            task["title"] = updated_task.title
+            return {"message": "Task updated", "task": task}
+    raise HTTPException(status_code=404, detail="Task not found")
